@@ -1,0 +1,83 @@
+{ reverse, unzip, cloneDeep } from lodash-es
+
+export type Point
+  x: number
+  y: number
+
+/**
+ * Place an array in cartesian coordinate system
+ * to use more natural X and Y positioning:
+ * ```
+ *       ^ y
+ *       |
+ *       123
+ *       456
+ * ------759-----> x
+ *       |
+ *       |
+ *       |
+ * ```
+ */
+export class Cartesian<Item>
+  arr: Item[][]
+
+  constructor(array: Item[][])
+    if array.some &.length !== array.length
+      throw new Error 'The array must be a square!'
+    @arr = unzip(array).map reverse
+
+  get(point: Point): Item
+  get(x: number, y: number): Item
+  get(x: number | Point, y?: number): Item | void
+    if (x <? 'object') return @arr[x.x][x.y]
+    if (y is not undefined) return @arr[x][y]
+    throw new Error 'Invalid arguments!'
+
+  set(point: Point, item: Item): this
+  set(x: number, y: number, item: Item): this
+  set(x: number | Point, y: number | Item, item?: Item): this
+    if @isPoint(x) and y !<? 'number'
+      @arr[x.x][x.y] = y
+    else if x <? 'number' and y <? 'number' and item is not undefined
+      @arr[x][y] = item
+    else
+      throw new Error 'Invalid arguments!'
+    @
+
+  forEach(
+    cb: (item: Item, x: number, y: number, cartesian: this) => void
+  ): this
+    for x of [0...@size]
+      for y of [0...@size]
+        item := @get x, y
+        cb item, x, y, @
+    @
+
+  print(logFn = console.log): this
+    for row of cloneDeep(@rows).reverse()
+      row.join '' |> logFn
+    @
+
+  get size(): number
+    @arr.length
+
+  get cols(): Item[][]
+    @arr
+
+  get rows(): Item[][]
+    unzip @arr
+
+  get values(): Item[] 
+    @arr.flatMap (&)
+
+  static createEmpty<T>(size: number, fill: T)
+    arr: T[][] := []
+    for x of [0...size]
+      arr.push []
+      for y of [0...size]
+        arr[x][y] = fill
+    new Cartesian(arr)
+
+  private isPoint(value: any): value is Point {
+    return value and value.x <? 'number' and value.y <? 'number';
+  }

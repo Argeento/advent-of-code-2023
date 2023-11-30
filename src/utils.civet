@@ -1,0 +1,131 @@
+{ readFileSync } from node:fs
+
+export * from lodash-es
+
+export function getInput(dirname: string): string 
+  new URL 'input.txt', dirname |> readFileSync |> .toString()
+
+export function getLines<T extends string>(dirname: string): T[]
+  lines := getInput dirname |> .split '\n'
+  lines.pop() if lines.-1 is ''
+  lines as T[]
+
+export function getNumbers(dirname: string): number[]
+  lines := getLines dirname
+  lines.length is 1
+    ? lines.0.split ',' |> .map +&
+    : lines.map +&
+
+export function getArray2d<T extends string>(
+  dirname: string,
+  splitBy = ''
+): T[][]
+  getLines(dirname).map &.split(splitBy) as T[]
+
+export function asc(a: any, b: any): number
+  a - b
+
+export function desc(a: any, b: any): number
+  b - a
+
+export function inRange(min: number, value: number, max: number): boolean 
+  min <= value <= max
+
+export function getManhattanDistance(
+  a: Position,
+  b: Position = x: 0, y: 0
+): number
+  Math.abs(a.x - b.x) + Math.abs(a.y - b.y)
+
+export function getDistance(a: Position, b: Position): number
+  Math.hypot a.x - b.x, a.y - b.y
+
+export function match<
+  Variant extends PropertyKey,
+  Options extends Record<Variant, () => any>
+>(variant: Variant, options: Options): ReturnType<Options[Variant]>
+  options[variant]()
+
+export function getColumn<T>(array: T[][], columnNumber: number): T[]
+  for row of array
+    row[columnNumber]
+
+export function loop2d<T>(
+  array: T[][],
+  callback: (y: number, x: number, item: T) => void
+): void
+  for y of [0...array.length]
+    for x of [0...array[y]!.length]
+      callback y, x, array[y]![x]!
+
+export function toNumber(str: string): number 
+  +(str.match(/\-?\d+((.|,)\d+)?/)?.[0] or '')
+
+export function toNumbers(str: string): number[]
+  (str.match(/\-?\d+(\.\d+)?/g) ?? []).map +&
+
+export function divisible(a: number, b: number): boolean
+  a % b is 0
+
+/** Greatest common divisor */
+export function getGcd(a: number, b: number): number 
+  !b ? a : getGcd(b, a % b)
+
+/** Least Common Multiple */
+export function getLcm(a: number[]): number
+export function getLcm(a: number, b: number): number
+export function getLcm(a: number | number[], b?: number): number
+ return Array.isArray(a)
+    ? a.reduce getLcm, 1
+    : // @ts-ignore
+      a * (b / getGcd a, b)
+
+export function adjacentPoints<T>(arr: T[][], x: number, y: number) 
+  up: arr[y - 1]?.[x],
+  upRight: arr[y - 1]?.[x + 1],
+  upLeft: arr[y - 1]?.[x - 1],
+  down: arr[y + 1]?.[x],
+  downRight: arr[y + 1]?.[x + 1],
+  downLeft: arr[y + 1]?.[x - 1],
+  left: arr[y][x - 1],
+  right: arr[y][x + 1],
+
+export function toKeys<Item, Key extends string>(...keys: Key[])
+  function (item: Item[]) 
+    obj := {} as Record<Key, Item>
+    for i of [0...keys.length]
+      obj[keys[i]] = item[i]
+    obj
+
+export function key<Key extends PropertyKey, Obj extends Record<Key, any>>(
+  key: Key
+): (obj: Obj) => Obj[Key]
+  function (obj: Obj)
+    obj[key]
+
+export function printArray(arr: any[], empty = '.'): void
+  for y of [0...arr.length]
+    for x of [0...arr[y]!.length]
+      process.stdout.write arr[y]![x] ?? empty
+    console.log()
+
+export function createArray<T>(y: number, x: number, filler: T): T[][]
+  new Array(y).fill(0).map
+    () => new Array(x).fill filler
+
+export function exhaustiveCheck(arg: never): void
+  arg;
+
+export function isPosition (arg: any): arg is Position
+  arg and arg.x <? 'number' and arg.y <? 'number'
+
+export function isPoint (arg: any): arg is Point
+  arg and arg.x <? 'number' and arg.y <? 'number'
+
+export function isPosition3d (arg: any): arg is Position3d
+  arg and arg.x <? 'number' and arg.y <? 'number' and arg.z <? 'number'
+
+export function isPoint3d (arg: any): arg is Point3d
+  arg and arg.x <? 'number' and arg.y <? 'number' and arg.z <? 'number'
+
+export log = console.log
