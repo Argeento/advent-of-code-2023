@@ -129,3 +129,9 @@ export function isPoint3d (arg: any): arg is Point3d
   arg and arg.x <? 'number' and arg.y <? 'number' and arg.z <? 'number'
 
 export log = console.log
+
+export function int (nr: string): number
+  parseInt nr
+
+export function float (nr: string): number
+  parseFloat nr
