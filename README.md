@@ -9,15 +9,15 @@ locations that are likely to be having problems.
 ## Day 1: Trebuchet?! ⭐⭐
 
 ```ts
-{ getLines, log, add } from ../utils.civet
+{ getLines, log, sum, int } from ../utils.civet
 
 lines := getLines import.meta.url
 
-function parseValue (line: string)
+function parseValue(line: string)
   nr := line.replace /[a-z]/g, ''
-  parseInt nr.0 + nr.-1
+  int nr.0 + nr.-1
 
-function convertWords (line: string)
+function convertWords(line: string)
   line
     .replaceAll 'one', 'o1e'
     .replaceAll 'two', 't2o'
@@ -30,8 +30,8 @@ function convertWords (line: string)
     .replaceAll 'nine', 'n9e'
     .replaceAll 'zero', 'z0o'
 
-log 'Part 1', lines.map(parseValue).reduce add 
-log 'Part 2', lines.map(convertWords).map(parseValue).reduce add
+log 'Part 1', sum lines.map(parseValue) 
+log 'Part 2', sum lines.map(convertWords).map(parseValue)
 ```
 
 
