@@ -80,15 +80,40 @@ export function getLcm(a: number | number[], b?: number): number
     : // @ts-ignore
       a * (b / getGcd a, b)
 
-export function adjacentPoints<T>(arr: T[][], x: number, y: number) 
-  up: arr[y - 1]?.[x],
-  upRight: arr[y - 1]?.[x + 1],
-  upLeft: arr[y - 1]?.[x - 1],
-  down: arr[y + 1]?.[x],
-  downRight: arr[y + 1]?.[x + 1],
-  downLeft: arr[y + 1]?.[x - 1],
-  left: arr[y][x - 1],
-  right: arr[y][x + 1],
+export function adjacentPoints<T>(arr: T[][], x: number, y: number)
+  [
+    item: arr[y - 1]?.[x]
+    x: x,
+    y: y - 1
+  ,
+    item: arr[y - 1]?.[x + 1]
+    x: x + 1,
+    y: y - 1
+  ,
+    item: arr[y - 1]?.[x - 1]
+    x: x - 1,
+    y: y - 1
+  ,
+    item: arr[y + 1]?.[x]
+    x: x,
+    y: y + 1
+  ,
+    item: arr[y + 1]?.[x + 1]
+    x: x + 1,
+    y: y + 1
+  ,
+    item: arr[y + 1]?.[x - 1]
+    x: x - 1,
+    y: y + 1
+  ,
+    item: arr[y][x - 1]
+    x: x - 1,
+    y: y
+  ,
+    item: arr[y][x + 1]
+    x: x + 1,
+    y: y
+  ]
 
 export function toKeys<Item, Key extends string>(...keys: Key[])
   function (item: Item[]) 

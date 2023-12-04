@@ -29,8 +29,8 @@ export class Cartesian<Item>
   get(point: Point): Item
   get(x: number, y: number): Item
   get(x: number | Point, y?: number): Item | void
-    if (x <? 'object') return @arr[x.x][x.y]
-    if (y is not undefined) return @arr[x][y]
+    if (x <? 'object') return @arr[x.x]?[x.y]
+    if (y is not undefined) return @arr[x]?[y]
     throw new Error 'Invalid arguments!'
 
   set(point: Point, item: Item): this
@@ -47,8 +47,8 @@ export class Cartesian<Item>
   forEach(
     cb: (item: Item, x: number, y: number, cartesian: this) => void
   ): this
-    for x of [0...@size]
-      for y of [0...@size]
+    for y of [0...@size]
+      for x of [0...@size]
         item := @get x, y
         cb item, x, y, @
     @
@@ -57,6 +57,20 @@ export class Cartesian<Item>
     for row of cloneDeep(@rows).reverse()
       row.join '' |> logFn
     @
+
+  adjacentPoints(x: number | Point, y?: number)
+    if @isPoint x
+      y = x.y
+      x = x.x
+  
+    up: @get x, y + 1
+    down: @get x, y - 1
+    left: @get x - 1, y
+    right: @get x + 1, y
+    upLeft: @get x - 1, y + 1
+    upRight: @get x + 1, y + 1
+    downLeft: @get x - 1, y - 1
+    downRight: @get x + 1, y - 1
 
   get size(): number
     @arr.length
