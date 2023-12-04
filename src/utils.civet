@@ -160,3 +160,6 @@ export function int (nr: string): number
 
 export function float (nr: string): number
   parseFloat nr
+
+export function multiply(arr: number[]): number
+  arr.reduce (a, b) => a * b

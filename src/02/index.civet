@@ -1,18 +1,13 @@
-{ log, getLines, max, sum, int } from ../utils.civet
+{ log, getLines, max, sum, int, keys, multiply } from ../utils.civet
 
 lines := getLines import.meta.url
-games := lines.map (l) => Array.from l.match /\d+ ./g
-
-function isGamePossible(game: string[])
-  game.every (draw) => int(draw) <= { r:12, g:13, b:14 }[draw.-1]
+games := lines.map (line) => Array.from line.match /\d+ ./g
+limits := r:12, g:13, b:14
 
 log 'Part 1', sum for game, id of games
-  if isGamePossible game then id + 1
-
-function maxPerColor(game: string[], color: string)
-  game.filter(&.includes color).map(int) |> max
+  if game.every (draw) => int(draw) <= limits[draw.-1]
+    id + 1
 
 log 'Part 2', sum games.map (game) =>
-  maxPerColor(game, 'r') *
-  maxPerColor(game, 'g') *
-  maxPerColor(game, 'b')
+  multiply keys(limits).map (color) =>
+    game.filter(.includes color).map(int) |> max
