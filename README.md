@@ -73,3 +73,29 @@ for line, y of lines
 log 'Part 1', sum flatten values parts
 log 'Part 2', sum values(parts).filter(.length > 1).map (n) => n.0 * n.1
 ```
+
+
+## Day 4: Scratchcards ⭐⭐
+
+```ts
+{ log, getLines, sum, toNumbers, values } from ../utils.civet
+
+lines := getLines import.meta.url
+
+function wins (line: string)
+  [wins, my] := line.split(':').1.split('|').map toNumbers
+  my.filter((nr) => wins.includes nr).length
+
+log 'Part 1', sum for line of lines
+  wins line |> (n) => n ? 1 << n - 1 : 0
+
+cards := {}
+for i in lines
+  cards[i] = 1
+
+for line, i of lines
+  for j .= i + 1; j <= i + wins line; j++
+    cards[j] += cards[i]
+
+log 'Part 2', sum values cards
+```
