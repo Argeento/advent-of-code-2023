@@ -121,3 +121,27 @@ log 'Part 1', min for let seed of seeds1
 
 // pt.2 in src/05/index2.civet - awaiting for refactor
 ```
+
+
+# Day 6: Wait For It ⭐⭐
+
+```ts
+{ log, getLines, toNumbers, toNumber, multiply } from ../utils.civet
+
+lines := getLines import.meta.url
+
+function timesWins(time: number, record: number): number
+  wins .= 0
+  for each t of [1...time]
+    wins += 1 if time - t > record / t
+  wins
+
+log 'Part 1', multiply for i of [0...4]
+  timesWins
+    toNumbers(lines.0)[i],
+    toNumbers(lines.1)[i]
+
+log 'Part 2', timesWins
+  toNumber lines.0.replaceAll ' ', ''
+  toNumber lines.1.replaceAll ' ', ''
+```
