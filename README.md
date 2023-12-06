@@ -99,3 +99,25 @@ for line, i of lines
 
 log 'Part 2', sum values cards
 ```
+
+
+## Day 5: If You Give A Seed A Fertilizer ⭐⭐
+
+```ts
+{ log, getInput, toNumbers, inRange, min, chunk } from ../utils.civet
+
+input := getInput(import.meta.url).split '\n\n'
+seeds1 := toNumbers input.0
+mappings := input[1..].map &.split('\n')[1..].map toNumbers
+
+function translate(nr: number, map: number[][])
+  range := map.find (map) => inRange map.1, nr, map.1 + map.2
+  range ? nr + range.0 - range.1 : nr
+  
+log 'Part 1', min for let seed of seeds1
+  for map of mappings
+    seed = translate seed, map
+  seed
+
+// pt.2 in src/05/index2.civet - awaiting for refactor
+```

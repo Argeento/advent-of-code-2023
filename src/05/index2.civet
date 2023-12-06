@@ -1,0 +1,98 @@
+{ log, getInput, toNumbers, chunk, compact, flatten } from ../utils.civet
+
+type Range =
+  from: number
+  to: number
+
+type Mapping =
+  from: number
+  to: number
+  delta: number
+
+type Transform = 
+  name: string
+  mappings: Mapping[]
+
+input := getInput(import.meta.url).split '\n\n'
+ranges: Range[] .= chunk toNumbers(input.0), 2
+  |> .map [from, length] => { from, to: from + length }
+
+transforms: Transform[] := input[1..].map (x) =>
+  name: x.split(' ').0
+  mappings: chunk(toNumbers(x), 3).map [dest, src, length] =>
+    from: src,
+    to: src + length - 1
+    delta: dest - src
+
+transforms.forEach .mappings.sort (a, b) => a.from - b.from
+
+function mergeOverlappingRanges (ranges: Range[]): Range[]
+  result: Range[] := []
+  ranges.sort (a, b) => a.from - b.from
+  for range of ranges
+    if result.length == 0
+      result.push range
+      continue
+    last := result[result.length - 1]
+    if range.from <= last.to
+      last.to = Math.max last.to, range.to
+    else
+      result.push range
+  result
+
+function useMappingOnRage (range: Range, mapping: Mapping)
+  // range is before mapping
+  if range.to < mapping.from
+    return
+
+  // range is after mapping
+  if range.from > mapping.to
+    return 
+  
+  // range is inside mapping
+  if range.from >= mapping.from and range.to <= mapping.to
+    return { from: range.from, to: range.to, delta: mapping.delta }
+
+  // range is overlapping mapping on the left
+  if range.from < mapping.from and range.to <= mapping.to
+    return { from: mapping.from, to: range.to, delta: mapping.delta }
+
+  // range is overlapping mapping on the right
+  if range.from >= mapping.from and range.to > mapping.to
+    return { from: range.from, to: mapping.to, delta: mapping.delta }
+
+  // range is overlapping mapping on both sides
+  if range.from < mapping.from and range.to > mapping.to
+    return { from: mapping.from, to: mapping.to, delta: mapping.delta }
+
+  throw new Error('How did we get here')
+
+function fillGapsInMappings(mappings: Mapping[], min: number, max: number)
+  mappings.sort (a, b) => a.from - b.from
+  filledMappings: Mapping[] := []
+  previousTo .= min
+
+  mappings.forEach (range) => 
+    if range.from > previousTo
+      filledMappings.push { from: previousTo, to: range.from - 1, delta: 0 }
+    filledMappings.push range
+    previousTo = range.to
+
+  if (previousTo < max) 
+    filledMappings.push { from: previousTo, to: max, delta: 0 }
+
+  filledMappings
+
+function mappingsToRanges (mappings: Mapping[]): Range[]
+  mappings.sort (a, b) => a.from - b.from
+  mappings.map (m) => { from: m.from + m.delta, to: m.to + m.delta }
+
+function useTransformOnRange (range: Range, transform: Transform)
+  x := compact transform.mappings.map (mapping) => useMappingOnRage range, mapping
+  mappingsToRanges fillGapsInMappings x, range.from, range.to
+
+for transform of transforms
+  ranges = mergeOverlappingRanges flatten for range of ranges
+    useTransformOnRange range, transform
+
+log ranges
