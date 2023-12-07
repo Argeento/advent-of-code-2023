@@ -163,3 +163,10 @@ export function float (nr: string): number
 
 export function multiply(arr: number[]): number
   arr.reduce (a, b) => a * b
+
+export function countChars(str: string)
+  counter: Record<string, number> := {}
+  for c of str.split ''
+    (counter[c] ?= 0)++
+  counter
+  
