@@ -1,1 +1,1 @@
-# Day 6: Wait For It ⭐⭐
+## Day 6: Wait For It ⭐⭐
