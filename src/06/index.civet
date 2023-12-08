@@ -2,11 +2,10 @@
 
 lines := getLines import.meta.url
 
-function timesWins(time: number, record: number): number
-  wins .= 0
-  for each t of [1...time]
-    wins += 1 if time - t > record / t
-  wins
+function timesWins(time: number, record: number)
+  return .= 0
+  for t of [1...time]
+    return++ if time - t > record / t
 
 log 'Part 1', multiply for i of [0...4]
   timesWins
