@@ -188,7 +188,7 @@ function getType(cards: string, joker: boolean)
 
 function count(cards: string)
   counter: Record<string, number> := {}
-  for card of cards.split ''
+  for card of cards.split('')
     (counter[card] ?= 0)++
   Object.values(counter).sort desc
 
