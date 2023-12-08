@@ -45,10 +45,10 @@ function compareHands(a: Hand, b: Hand)
     ? a.cards > b.cards ? 1 : -1
     : a.type - b.type
 
-function fixCardsStrength(cards: string, jocker: boolean)
+function fixCardsStrength(cards: string, joker: boolean)
   cards = cards
     .replaceAll 'A', 'E'
     .replaceAll 'K', 'D'
     .replaceAll 'Q', 'C'
-    .replaceAll 'J', jocker ? '1' : 'B'
+    .replaceAll 'J', joker ? '1' : 'B'
     .replaceAll 'T', 'A'
