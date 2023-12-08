@@ -1,4 +1,4 @@
-{ log, getLines, int, sum, flatten, values } from ../utils.civet
+{ log, getLines, sum, flatten, values } from ../utils.civet
 
 lines := getLines import.meta.url
 parts: Record<string, number[]> := {}
@@ -7,9 +7,8 @@ for line, y of lines
   for m of line.matchAll /\d+/g
     for y of [y - 1..y + 1]
       for x of [m.index - 1..m.index + m.0.length]
-        if char := lines[y]?.[x]
-          unless /[0-9.]/.test char
-            (parts.`${x},${y}` ??= []).push int m.0
+        unless /[0-9.]/.test lines[y]?.[x]
+          (parts.`${x},${y}` ?= []).push +m.0
 
 log 'Part 1', sum flatten values parts
-log 'Part 2', sum values(parts).filter(.length > 1).map (n) => n.0 * n.1
+log 'Part 2', sum values(parts).map (x) => x.0 * x.1 ?= 0

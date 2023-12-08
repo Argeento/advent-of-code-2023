@@ -57,7 +57,7 @@ log 'Part 2', sum games.map (game) =>
 ## Day 3: Gear Ratios ⭐⭐
 
 ```ts
-{ log, getLines, int, sum, flatten, values } from ../utils.civet
+{ log, getLines, sum, flatten, values } from ../utils.civet
 
 lines := getLines import.meta.url
 parts: Record<string, number[]> := {}
@@ -66,12 +66,11 @@ for line, y of lines
   for m of line.matchAll /\d+/g
     for y of [y - 1..y + 1]
       for x of [m.index - 1..m.index + m.0.length]
-        if char := lines[y]?.[x]
-          unless /[0-9.]/.test char
-            (parts.`${x},${y}` ??= []).push int m.0
+        unless /[0-9.]/.test lines[y]?.[x]
+          (parts.`${x},${y}` ?= []).push +m.0
 
 log 'Part 1', sum flatten values parts
-log 'Part 2', sum values(parts).filter(.length > 1).map (n) => n.0 * n.1
+log 'Part 2', sum values(parts).map (x) => x.0 * x.1 ?= 0
 ```
 
 
@@ -130,11 +129,10 @@ log 'Part 1', min for let seed of seeds1
 
 lines := getLines import.meta.url
 
-function timesWins(time: number, record: number): number
-  wins .= 0
-  for each t of [1...time]
-    wins += 1 if time - t > record / t
-  wins
+function timesWins(time: number, record: number)
+  return .= 0
+  for t of [1...time]
+    return++ if time - t > record / t
 
 log 'Part 1', multiply for i of [0...4]
   timesWins
@@ -176,7 +174,7 @@ function parseHand(line: string, joker: boolean): Hand
 
 function getType(cards: string, joker: boolean)
   counter := count cards.replaceAll joker ? 'J' : '', ''
-  if joker then (counter.0 ?= 0) += cards.match(/J/g) || [] |> .length
+  if joker then (counter.0 ?= 0) += cards.match(/J/g)?.length ?? 0
   switch counter
     [5] 6
     [4, 1] 5
@@ -198,7 +196,7 @@ function compareHands(a: Hand, b: Hand)
     : a.type - b.type
 
 function fixCardsStrength(cards: string, joker: boolean)
-  cards = cards
+  cards
     .replaceAll 'A', 'E'
     .replaceAll 'K', 'D'
     .replaceAll 'Q', 'C'
