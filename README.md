@@ -123,7 +123,7 @@ log 'Part 1', min for let seed of seeds1
 ```
 
 
-# Day 6: Wait For It ⭐⭐
+## Day 6: Wait For It ⭐⭐
 
 ```ts
 { log, getLines, toNumbers, toNumber, multiply } from ../utils.civet
@@ -147,7 +147,7 @@ log 'Part 2', timesWins
 ```
 
 
-# Day 7: Camel Cards ⭐⭐
+## Day 7: Camel Cards ⭐⭐
 
 ```ts
 { log, getLines, int, sum, desc } from ../utils.civet
@@ -197,11 +197,43 @@ function compareHands(a: Hand, b: Hand)
     ? a.cards > b.cards ? 1 : -1
     : a.type - b.type
 
-function fixCardsStrength(cards: string, jocker: boolean)
+function fixCardsStrength(cards: string, joker: boolean)
   cards = cards
     .replaceAll 'A', 'E'
     .replaceAll 'K', 'D'
     .replaceAll 'Q', 'C'
-    .replaceAll 'J', jocker ? '1' : 'B'
+    .replaceAll 'J', joker ? '1' : 'B'
     .replaceAll 'T', 'A'
+```
+
+
+## Day 8: Haunted Wasteland ⭐⭐
+
+```ts
+{ log, getInput, getLcm, keys } from ../utils.civet
+
+input := getInput import.meta.url |> .split '\n\n'
+insNr .= 0
+getIns := => input.0[insNr++ % input.0.length] is 'L' ? 0 : 1
+nodes := {}
+
+for node of input.1.split('\n').map .match /\w+/g
+ nodes[node.0] = node[1..]
+
+function movesNr(startNode: string, endNodes: string[])
+  moves .= 0
+  name .= startNode
+  node .= nodes[startNode]
+  while not endNodes.includes name
+    moves++
+    name = node[getIns()]
+    node = nodes[name]
+  moves
+
+log 'Part 1', movesNr('AAA', ['ZZZ'])
+
+startNodes := keys(nodes).filter .endsWith 'A'
+endNodes := keys(nodes).filter .endsWith 'Z'
+
+log 'Part 2', getLcm startNodes.map (start) => movesNr start, endNodes
 ```

@@ -1,0 +1,26 @@
+{ log, getInput, getLcm, keys } from ../utils.civet
+
+input := getInput import.meta.url |> .split '\n\n'
+insNr .= 0
+getIns := => input.0[insNr++ % input.0.length] is 'L' ? 0 : 1
+nodes := {}
+
+for node of input.1.split('\n').map .match /\w+/g
+ nodes[node.0] = node[1..]
+
+function movesNr(startNode: string, endNodes: string[])
+  moves .= 0
+  name .= startNode
+  node .= nodes[startNode]
+  while not endNodes.includes name
+    moves++
+    name = node[getIns()]
+    node = nodes[name]
+  moves
+
+log 'Part 1', movesNr('AAA', ['ZZZ'])
+
+startNodes := keys(nodes).filter .endsWith 'A'
+endNodes := keys(nodes).filter .endsWith 'Z'
+
+log 'Part 2', getLcm startNodes.map (start) => movesNr start, endNodes
