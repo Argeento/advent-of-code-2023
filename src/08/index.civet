@@ -9,14 +9,13 @@ for node of input.1.split('\n').map .match /\w+/g
  nodes[node.0] = node[1..]
 
 function movesNr(startNode: string, endNodes: string[])
-  moves .= 0
+  return .= 0
   name .= startNode
   node .= nodes[startNode]
-  while not endNodes.includes name
-    moves++
+  until endNodes.includes name
+    return++
     name = node[getIns()]
     node = nodes[name]
-  moves
 
 log 'Part 1', movesNr('AAA', ['ZZZ'])
 
