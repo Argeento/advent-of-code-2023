@@ -234,3 +234,25 @@ endNodes := keys(nodes).filter .endsWith 'Z'
 
 log 'Part 2', getLcm startNodes.map (start) => movesNr start, endNodes
 ```
+
+
+## Day 9: Mirage Maintenance ⭐⭐
+
+```ts
+{ log, getLines, toNumbers, sum } from ../utils.civet
+
+lines := getLines(import.meta.url).map toNumbers
+
+function getSequence(arr: number[])
+  for i of [1...arr.length]
+    arr[i] - arr[i - 1]
+
+function predict(arr: number[])
+  arrs := [arr]
+  while sum arrs.-1
+    arrs.push getSequence arrs.-1
+  sum arrs.map .-1
+
+log 'Part 1', sum lines.map predict
+log 'Part 2', sum lines.map (line) => predict line.reverse()
+```
