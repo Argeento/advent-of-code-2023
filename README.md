@@ -307,3 +307,46 @@ for y of [0...lines.length]
 
 log 'Part 2', area
 ```
+
+
+## Day 11: Cosmic Expansion
+
+```ts
+{ log, getLines, sum } from ../utils.civet
+
+lines .= getLines import.meta.url
+
+expandingRows := []
+for line, y of lines
+  expandingRows.push y unless '#' is in line
+
+expandingCols := []
+for x of [0...lines.0.length]
+  expandingCols.push x if lines.every &[x] is '.'
+
+galaxies := []
+for y of [0...lines.length]
+  for x of [0...lines.0.length]
+    galaxies.push [x, y] if lines[y][x] is '#'
+
+function getDistance([[x1, y1], [x2, y2]])
+  Math.abs(x1 - x2) + Math.abs(y1 - y2)
+
+function getPairs(galaxies: number[][])
+  for i of [0...galaxies.length]
+    for j of [i + 1...galaxies.length]
+      [galaxies[i], galaxies[j]]
+
+function expand(galaxies: number[][], multiplayer: number)
+  for [x, y] of galaxies
+    r := expandingRows.filter(& < y).length
+    c := expandingCols.filter(& < x).length
+    [x + c * (multiplayer - 1), y + r * (multiplayer - 1)]
+
+function sumDistances(galaxies: number[][], expandMultiplier: number)
+  galaxies = expand galaxies, expandMultiplier
+  sum getPairs(galaxies).flatMap (&).map getDistance
+
+log 'Part 1', sumDistances galaxies, 2
+log 'Part 2', sumDistances galaxies, 1e6
+```
