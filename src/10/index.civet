@@ -1,0 +1,45 @@
+pointInPolygon from 'point-in-polygon'
+{ log, getLines } from ../utils.civet
+
+lines := getLines import.meta.url
+startY := lines.findIndex &.includes 'S'
+startX := lines[startY].indexOf 'S'
+
+last .= [startX, startY]
+current .= [startX, startY + 1]
+polygon := [current]
+
+while next := move current, last
+  last = current
+  polygon.push current = next
+
+function move([x, y]: number[], [prevX, prevY]: number[])
+  disabledDir .= switch prevX - x
+    > 0 then 'E'
+    < 0 then 'W'
+    else prevY - y < 0 ? 'N' : 'S'
+
+  switch lines[y][x] + disabledDir
+    '-E' [x - 1, y]
+    '-W' [x + 1, y]
+    '|N' [x, y + 1]
+    '|S' [x, y - 1]
+    '7W' [x, y + 1]
+    '7S' [x - 1, y]
+    'LN' [x + 1, y]
+    'LE' [x, y - 1]
+    'JW' [x, y - 1]
+    'JN' [x - 1, y]
+    'FS' [x + 1, y]
+    'FE' [x, y + 1]
+
+log 'Part 1', polygon.length / 2
+
+area .= 0
+for y of [0...lines.length]
+  for x of [0...lines.0.length]
+    unless polygon.some [px, py] => px is x and py is y
+      if pointInPolygon [x, y], polygon
+        area++
+
+log 'Part 2', area
