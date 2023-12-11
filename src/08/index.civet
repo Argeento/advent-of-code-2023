@@ -12,12 +12,12 @@ function movesNr(startNode: string, endNodes: string[])
   return .= 0
   name .= startNode
   node .= nodes[startNode]
-  until endNodes.includes name
+  until name is in endNodes
     return++
     name = node[getIns()]
     node = nodes[name]
 
-log 'Part 1', movesNr('AAA', ['ZZZ'])
+log 'Part 1', movesNr 'AAA', ['ZZZ']
 
 startNodes := keys(nodes).filter .endsWith 'A'
 endNodes := keys(nodes).filter .endsWith 'Z'
