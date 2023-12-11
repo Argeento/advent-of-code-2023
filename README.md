@@ -83,7 +83,7 @@ lines := getLines import.meta.url
 
 function wins (line: string)
   [wins, my] := line.split(':').1.split('|').map toNumbers
-  my.filter((nr) => wins.includes nr).length
+  my.filter(& is in wins).length
 
 log 'Part 1', sum for line of lines
   wins line |> (n) => n ? 1 << n - 1 : 0
@@ -222,12 +222,12 @@ function movesNr(startNode: string, endNodes: string[])
   return .= 0
   name .= startNode
   node .= nodes[startNode]
-  until endNodes.includes name
+  until name is in endNodes
     return++
     name = node[getIns()]
     node = nodes[name]
 
-log 'Part 1', movesNr('AAA', ['ZZZ'])
+log 'Part 1', movesNr 'AAA', ['ZZZ']
 
 startNodes := keys(nodes).filter .endsWith 'A'
 endNodes := keys(nodes).filter .endsWith 'Z'
@@ -254,7 +254,7 @@ function predict(arr: number[])
   sum arrs.map .-1
 
 log 'Part 1', sum lines.map predict
-log 'Part 2', sum lines.map (line) => predict line.reverse()
+log 'Part 2', sum lines.map(.reverse()).map predict
 ```
 
 
@@ -300,10 +300,9 @@ log 'Part 1', polygon.length / 2
 
 area .= 0
 for y of [0...lines.length]
-  for x of [0...lines.0.length]
+  for x of [0...lines.length]
     unless polygon.some [px, py] => px is x and py is y
-      if pointInPolygon [x, y], polygon
-        area++
+      area++ if pointInPolygon [x, y], polygon
 
 log 'Part 2', area
 ```
