@@ -13,4 +13,4 @@ function predict(arr: number[])
   sum arrs.map .-1
 
 log 'Part 1', sum lines.map predict
-log 'Part 2', sum lines.map (line) => predict line.reverse()
+log 'Part 2', sum lines.map(.reverse()).map predict
