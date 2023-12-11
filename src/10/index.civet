@@ -37,9 +37,8 @@ log 'Part 1', polygon.length / 2
 
 area .= 0
 for y of [0...lines.length]
-  for x of [0...lines.0.length]
+  for x of [0...lines.length]
     unless polygon.some [px, py] => px is x and py is y
-      if pointInPolygon [x, y], polygon
-        area++
+      area++ if pointInPolygon [x, y], polygon
 
 log 'Part 2', area
