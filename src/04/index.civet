@@ -4,7 +4,7 @@ lines := getLines import.meta.url
 
 function wins (line: string)
   [wins, my] := line.split(':').1.split('|').map toNumbers
-  my.filter((nr) => wins.includes nr).length
+  my.filter(& is in wins).length
 
 log 'Part 1', sum for line of lines
   wins line |> (n) => n ? 1 << n - 1 : 0
