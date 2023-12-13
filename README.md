@@ -308,7 +308,7 @@ log 'Part 2', area
 ```
 
 
-## Day 11: Cosmic Expansion
+## Day 11: Cosmic Expansion ⭐⭐
 
 ```ts
 { log, getLines, sum } from ../utils.civet
@@ -348,4 +348,33 @@ function sumDistances(galaxies: number[][], expandMultiplier: number)
 
 log 'Part 1', sumDistances galaxies, 2
 log 'Part 2', sumDistances galaxies, 1e6
+```
+
+
+## Day 12: Hot Springs ⭐⭐
+
+```ts
+{ log, getLines, toNumbers, sum } from ../utils.civet
+
+lines := getLines(import.meta.url).map &.split ' '
+mem := {}
+
+function combinations(springs: string, groups: number[], counter = 0): number
+  memKey := springs + groups
+  return mem[memKey] if mem[memKey]
+  return '#' is in springs ? 0 : 1 unless groups.length
+  [nr, ...rest] := groups
+  for i .= 0; i <= springs.length - rest.length - sum(rest) - nr; i++
+    break if '#' is in springs[0...i]
+    if '.' is not in springs[i...i + nr] and springs[i + nr] is not "#"
+      counter += combinations springs[i + nr + 1..], rest
+  mem[memKey] = counter
+
+log 'Part 1', sum for [springs, groups] of lines
+  combinations springs, toNumbers groups
+
+log 'Part 2', sum for [springs, groups] of lines
+  combinations 
+    new Array(5).fill(springs).join('?'),
+    new Array(5).fill(toNumbers groups).flatMap (&)
 ```
