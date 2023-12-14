@@ -6,6 +6,55 @@ Something is wrong with global snow production, and you've been selected to take
 The Elves have even given you a map; on it, they've used stars to mark the top fifty
 locations that are likely to be having problems.
 
+## Day 14: Parabolic Reflector Dish ⭐⭐
+
+```ts
+{ log, getLines, sum, cloneDeep, zip } from ../utils.civet
+
+stones .= getLines import.meta.url |> .map .split ''
+
+function step(stones: string[][])
+  return .= 0
+  for y of [0...stones.length]
+    for x of [0...stones.0.length]
+      if stones[y][x] is 'O' and stones[y - 1]?[x] is '.'
+        stones[y][x] = '.'
+        stones[y - 1][x] = 'O'
+        return++
+
+function move(stones: string[][])
+  while step stones;
+  stones
+
+function calcWeight(stones: string[][])
+  sum for line, y of stones
+    line.filter(& is 'O').length * (stones.length - y)
+
+log 'Part 1', calcWeight move cloneDeep stones
+
+function cycle()
+  for [0...4]
+    stones = zip(...move stones).map .reverse()
+
+mem := {}
+i .= 0
+offset .= 0
+
+loop
+  memKey := JSON.stringify stones
+  if mem[memKey]
+    offset = mem[memKey]
+    break
+  mem[memKey] = i++
+  cycle()
+
+for [0...(1e9 - offset) % (i - offset)]
+  cycle()
+
+log 'Part 2', calcWeight stones
+```
+
+
 ## Day 13: Point of Incidence ⭐⭐
 
 ```ts
