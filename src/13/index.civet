@@ -1,14 +1,14 @@
 { log, getInput, sum, zip } from ../utils.civet
 
 patterns := getInput import.meta.url
-  .split '\n\n' |> .map &.split '\n'
+  .split('\n\n').map &.split('\n')
 
 function diffs(str1: string, str2: string)
   sum for c, i of str1
     c is not str2[i]
 
 function rotate(pattern: string[])
-  zip(...pattern.map &.split '').flatMap &.join ''
+  zip(...pattern.map &.split '').flatMap &.join('')
 
 function searchMirror(pattern: string[], possibleErrors: number)
   for y of [0...pattern.length - 1]
