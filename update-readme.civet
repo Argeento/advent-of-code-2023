@@ -17,7 +17,7 @@ Something is wrong with global snow production, and you've been selected to take
 The Elves have even given you a map; on it, they've used stars to mark the top fifty
 locations that are likely to be having problems.`
 
-for dir of dirs
+for dir of dirs.reverse()
   story := readFile dir, 'story.md'
   code := readFile dir, 'index.civet'
   readme += `
