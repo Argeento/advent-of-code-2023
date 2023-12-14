@@ -1,0 +1,26 @@
+{ log, getInput, sum, zip } from ../utils.civet
+
+patterns := getInput import.meta.url
+  .split '\n\n' |> .map &.split '\n'
+
+function diffs(str1: string, str2: string)
+  sum for c, i of str1
+    c is not str2[i]
+
+function rotate(pattern: string[])
+  zip(...pattern.map &.split '').flatMap &.join ''
+
+function searchMirror(pattern: string[], possibleErrors: number)
+  for y of [0...pattern.length - 1]
+    errors .= 0
+    for i .= 0; y - i >= 0 and y + i + 1 < pattern.length; i++
+      errors += diffs pattern[y - i], pattern[y + i + 1]
+    return y + 1 if errors is possibleErrors
+  0
+
+function getNote(pattern: string[], possibleErrors: number)
+  100 * searchMirror(pattern, possibleErrors) +
+  searchMirror(rotate(pattern), possibleErrors)
+
+log 'Part 1', sum patterns.map (p) => getNote p, 0
+log 'Part 2', sum patterns.map (p) => getNote p, 1
