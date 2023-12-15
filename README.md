@@ -6,6 +6,34 @@ Something is wrong with global snow production, and you've been selected to take
 The Elves have even given you a map; on it, they've used stars to mark the top fifty
 locations that are likely to be having problems.
 
+## Day 15: Lens Library ⭐⭐
+
+```ts
+{ log, getInput, sum, toNumber, entries, values } from ../utils.civet
+
+codes := getInput import.meta.url |> .trim().split(',')
+
+function calcHash(code: string)
+  [...code].reduce (nr, c) => (nr + c.charCodeAt 0) * 17 % 256, 0
+
+log 'Part 1', sum codes.map calcHash
+
+boxes := {}
+for code of codes
+  label := code.replace /[^a-z]/g, ''
+  hash := calcHash label
+  (boxes[hash] ?= [])[label] = toNumber code
+  delete boxes[hash][label] if code.includes('-')
+
+focusingPower .= 0
+for [hash, lenses] of entries boxes
+  for focal, i of values lenses
+    focusingPower += (+hash + 1) * (i + 1) * focal
+
+log 'Part 2', focusingPower 
+```
+
+
 ## Day 14: Parabolic Reflector Dish ⭐⭐
 
 ```ts

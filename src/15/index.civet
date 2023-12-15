@@ -1,0 +1,22 @@
+{ log, getInput, sum, toNumber, entries, values } from ../utils.civet
+
+codes := getInput import.meta.url |> .trim().split(',')
+
+function calcHash(code: string)
+  [...code].reduce (nr, c) => (nr + c.charCodeAt 0) * 17 % 256, 0
+
+log 'Part 1', sum codes.map calcHash
+
+boxes := {}
+for code of codes
+  label := code.replace /[^a-z]/g, ''
+  hash := calcHash label
+  (boxes[hash] ?= [])[label] = toNumber code
+  delete boxes[hash][label] if code.includes('-')
+
+focusingPower .= 0
+for [hash, lenses] of entries boxes
+  for focal, i of values lenses
+    focusingPower += (+hash + 1) * (i + 1) * focal
+
+log 'Part 2', focusingPower 
